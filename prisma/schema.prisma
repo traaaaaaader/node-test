@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model Events {
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(150)
+  totalSeats Int    @map("total_seats")
+
+  bookings   Booking[]
+
+  @@map("events")
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  eventId   Int      @map("event_id")
+  userId    String   @map("user_id") @db.VarChar(255)
+
+  event     Events   @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([eventId, userId])
+  @@map("bookings")
+}

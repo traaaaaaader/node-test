@@ -1,0 +1,12 @@
+services:
+  migrate_booking:
+    container_name: migrate_booking
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    env_file: .env
+    networks:
+      - booking_network
+
+networks:
+  booking_network:
