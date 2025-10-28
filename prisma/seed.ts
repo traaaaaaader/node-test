@@ -9,23 +9,23 @@ async function main() {
 		data: [
 			{
 				name: "Концерт рок-группы",
-				totalSeats: 100,
+				totalSeats: 20,
 			},
 			{
 				name: "Стендап шоу",
-				totalSeats: 50,
+				totalSeats: 10,
 			},
 			{
 				name: "Театральная постановка",
-				totalSeats: 150,
+				totalSeats: 30,
 			},
 			{
 				name: "Кинопоказ",
-				totalSeats: 200,
+				totalSeats: 50,
 			},
 			{
 				name: "Мастер-класс по рисованию",
-				totalSeats: 30,
+				totalSeats: 5,
 			},
 		],
 	});
