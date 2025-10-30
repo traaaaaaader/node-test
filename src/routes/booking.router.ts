@@ -4,7 +4,10 @@ import { PrismaClient } from "@prisma/client";
 import { BookingController } from "../controllers/booking.controller";
 import { BookingService } from "../services/booking.service";
 
-import { reserveValidator } from "../validators/booking.validator";
+import {
+	reserveValidator,
+	getTopValidator,
+} from "../validators/booking.validator";
 import { validateMiddleware } from "../middlewares";
 
 const prisma = new PrismaClient();
@@ -18,6 +21,13 @@ router.post(
 	reserveValidator,
 	validateMiddleware,
 	bookingController.reserve,
+);
+
+router.get(
+	"/bookings/top",
+	getTopValidator,
+	validateMiddleware,
+	bookingController.getTop,
 );
 
 export { router as bookingRouter };

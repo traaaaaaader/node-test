@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ReserveDto } from "../dto/booking.dto";
+import type { ReserveDto, TopDto } from "../dto/booking.dto";
 import AppError from "../utils/AppError";
 
 export class BookingService {
@@ -47,5 +47,42 @@ export class BookingService {
 		});
 
 		return booking;
+	}
+
+	async getTop({ startDate, endDate }: TopDto) {
+		const start = new Date(startDate);
+		const end = new Date(endDate);
+
+		if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+			throw new AppError("Неверный формат даты. Используйте YYYY-MM-DD", 400);
+		}
+
+		start.setHours(0, 0, 0, 0);
+		end.setHours(23, 59, 59, 999);
+
+		if (start > end) {
+			throw new AppError("Начальная дата не может быть позже конечной", 400);
+		}
+
+		const grouped = await this.prisma.booking.groupBy({
+			by: ["userId"],
+			_count: { id: true },
+			where: {
+				createdAt: {
+					gte: start,
+					lte: end,
+				},
+			},
+		});
+
+		grouped.sort((a, b) => b._count.id - a._count.id);
+
+		const top = grouped.slice(0, 10);
+
+		return top.map((r, i) => ({
+			user_id: r.userId,
+			place: i + 1,
+			booking_count: r._count.id,
+		}));
 	}
 }
