@@ -75,9 +75,7 @@ export class BookingService {
 			},
 		});
 
-		grouped.sort((a, b) => b._count.id - a._count.id);
-
-		const top = grouped.slice(0, 10);
+		const top = grouped.sort((a, b) => b._count.id - a._count.id).slice(0, 10);
 
 		return top.map((r, i) => ({
 			user_id: r.userId,
